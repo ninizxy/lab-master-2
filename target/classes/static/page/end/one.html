@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>实验一</title>
+    <link rel="stylesheet" href="../../css/element.css">
+    <link rel="stylesheet" href="../../css/base.css">
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <div style="padding-bottom: 10px">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item @click.native="parent.changeIndex('index')">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>实验一  IFPUG法</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+
+    <div style="height: 1px; margin: 10px 0; background-color: white"></div>
+    <template>
+        <el-steps :active="active" finish-status="success" align-center>
+            <el-step title="Step 1" description="填写规模估算明细"></el-step>
+            <el-step title="Step 2" description="填写通用系统特征调整参数"></el-step>
+            <el-step title="Step 3" description="计算FP"></el-step>
+        </el-steps>
+
+        <el-row v-show="active === 0"  style="margin-top: 20px">
+            <el-space wrap>
+                <el-table :data="stepOneData" align="center" style="width: 100%" >
+                    <el-table-column label="项目规模估算明细" align="center" >
+                        <el-table-column   prop="element" label="要素" align="center" fixed></el-table-column>
+                        <el-table-column label="内部逻辑文件(ILF)" align="center">
+                            <el-table-column prop="L_ILF" label="低" align="center"></el-table-column>
+                            <el-table-column prop="M_ILF" label="中" align="center"></el-table-column>
+                            <el-table-column prop="H_ILF" label="高" align="center"></el-table-column>
+                        </el-table-column>
+                        <el-table-column label="外部接口文件(ELF)" align="center">
+                            <el-table-column prop="L_ELF" label="低" align="center"></el-table-column>
+                            <el-table-column prop="M_ELF" label="中" align="center"></el-table-column>
+                            <el-table-column prop="H_ELF" label="高" align="center"></el-table-column>
+                        </el-table-column>
+
+                    </el-table-column>
+                </el-table>
+                <el-table :data="stepOneData" align="center"  style="width: 100%">
+                    <el-table-column  prop="element" label="要素" align="center" fixed >
+                    </el-table-column>
+                    <el-table-column label="外部输入(EI)" align="center">
+                        <el-table-column prop="L_EI" label="低" align="center"></el-table-column>
+                        <el-table-column prop="M_EI" label="中" align="center"></el-table-column>
+                        <el-table-column prop="H_EI" label="高" align="center"></el-table-column>
+                    </el-table-column>
+                    <el-table-column label="外部输出(EO)" align="center">
+                        <el-table-column prop="L_EO" label="低" align="center"></el-table-column>
+                        <el-table-column prop="M_EO" label="中" align="center"></el-table-column>
+                        <el-table-column prop="H_EO" label="高" align="center"></el-table-column>
+                    </el-table-column>
+                    <el-table-column label="外部查询(EQ)" align="center">
+                        <el-table-column prop="L_EQ" label="低" align="center"></el-table-column>
+                        <el-table-column prop="M_EQ" label="中" align="center"></el-table-column>
+                        <el-table-column prop="H_EQ" label="高" align="center"></el-table-column>
+                    </el-table-column>
+
+                </el-table>
+                <el-row style="margin-top: 20px ;margin-right: 20px">
+                    <el-button @click="next">下一步</el-button>
+                </el-row>
+            </el-space>
+        </el-row>
+
+        <el-row v-show="active === 1" style="margin-top: 20px" >
+            <el-table :data="stepTwoData" style="width: 100%" border stripe>
+                <el-table-column prop="GSC" label="通用系统特征"  align="center"></el-table-column>
+                <el-table-column prop="score" label="影响程度DI" align="center">
+                    <el-rate
+                            v-model="stepTwoData.score"
+                            :texts="['1', '2', '3', '4', '5']"
+                            show-text
+                    >
+                    </el-rate>
+                </el-table-column>
+            </el-table>
+            <el-row style="margin-top: 20px ;margin-right: 20px">
+                <el-button  @click="last">上一步</el-button>
+                <el-button  @click="next">下一步</el-button>
+            </el-row>
+
+        </el-row>
+        <el-row v-show="active === 2" :gutter="20">
+            <el-row style="margin-top: 20px ;margin-right: 20px">
+            <el-button  @click="last">上一步</el-button>
+            <el-button  @click="next">完成</el-button>
+            </el-row>
+
+        </el-row>
+
+
+
+    </template>
+
+</div>
+
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/vue.min.js"></script>
+<script src="../../js/element.js"></script>
+<script src="../../js/tinymce/tinymce.min.js"></script>
+<style>
+    .el-table td {
+        padding: 18px 0;
+    }
+    .el-table th {
+        padding: 12px 0;
+    }
+</style>
+
+<script>
+    new Vue({
+        el: "#wrapper",
+        data: {
+            user: {},
+            tableData: [],
+            pageNum: 1,
+            pageSize: 10,
+            total: 0,
+            dialogFormVisible: false,
+            entity: {},
+            isCollapse: false,
+            search: '',
+            active: 0,//激活页面
+
+            stepOneData: [
+                {
+                    element:'功能点权重',
+                    L_ILF:'2',
+                    M_ILF:'7',
+                    H_ILF:'10',
+
+                    L_ELF:'7',
+                    M_ELF:'10',
+                    H_ELF:'15',
+
+                    L_EI:'3',
+                    M_EI:'4',
+                    H_EI:'6',
+
+                    L_EO:'4',
+                    M_EO:'5',
+                    H_EO:'7',
+
+                    L_EQ:'3',
+                    M_EQ:'4',
+                    H_EQ:'6',
+
+                 },
+                {
+                    element:'功能点个数'
+                }
+            ],
+
+            stepTwoData: [
+                {
+                    GSC:'数据通信(Data Communication)',
+                    score:4,
+                },
+                {
+                    GSC:'分布数据处理(Distributed Data Processing)',
+                    score:4,
+                },
+                {
+                    GSC:'性能(Performance)',
+                    score:4,
+                },
+                {
+                    GSC:'重度使用配置(Heavily used Configuration',
+                    score:4,
+                },
+                {
+                    GSC:'事务率(Transaction Rate)',
+                    score:4,
+                },
+                {
+                    GSC:'在线数据输入(Oneline Data Entry)',
+                    score:4,
+                },
+                {
+                    GSC:'终端数据输入(End-User Efficiency)',
+                    score:4,
+                },
+                {
+                    GSC:'在线更新(Online Update)',
+                    score:4,
+                },
+                {
+                    GSC:'复杂处理(Data Communication)',
+                    score:4,
+                },
+                {
+                    GSC:'可重用性(Reusability)',
+                    score:4,
+                },
+                {
+                    GSC:'安装简易性(Installation Ease)',
+                    score:4,
+                },
+                {
+                    GSC:'易操作性(Operational Ease)',
+                    score:4,
+                },
+                {
+                    GSC:'多站点(Multiple Sites)',
+                    score:4,
+                },
+                {
+                    GSC:'便于更改(Facilitate Change)',
+                    score:4,
+                },
+            ]
+        },
+        created() {
+
+        },
+        methods: {
+            next() {
+                if (this.active++ > 2) this.active = 2
+            },
+            last(){
+                if (this.active-- < 0 ) this.active = 0
+            }
+
+
+        }
+    })
+</script>
+</body>
+</html>

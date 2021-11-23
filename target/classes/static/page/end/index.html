@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>首页</title>
+    <link rel="stylesheet" href="../../css/element.css">
+    <link rel="stylesheet" href="../../css/base.css">
+    <style>
+        .el-divider__text {
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <!--                <div style="margin: 10px 0"><el-button  @click="location.href = '/page/front/frame.html'">前往前台首页</el-button></div>-->
+    <!--                <el-divider content-position="left">数据概览</el-divider>-->
+    <!--                <el-row :gutter="10" style="padding: 5px 0">-->
+    <!--                    <el-col :span="6">-->
+    <!--                        <el-card style="padding: 10px">-->
+    <!--                            <div style="display: inline-block; padding-right: 20px; vertical-align: middle;">-->
+    <!--                                <img src="../../file/home/home-01.png" style="width: 60px">-->
+    <!--                            </div>-->
+    <!--                            <div style="display: inline-block; padding-left: 40px; vertical-align: middle;">-->
+    <!--                                <div style="color: #455a64; font-size: 24px; padding-bottom: 5px">{{ users.length }}</div>-->
+    <!--                                <div style="color: #99abb4;">用户</div>-->
+    <!--                            </div>-->
+    <!--                        </el-card>-->
+    <!--                    </el-col>-->
+    <!--                    <el-col :span="6">-->
+    <!--                        <el-card style="padding: 10px">-->
+    <!--                            <div style="display: inline-block; padding-right: 20px; vertical-align: middle;">-->
+    <!--                                <img src="../../file/home/home-02.png" style="width: 60px">-->
+    <!--                            </div>-->
+    <!--                            <div style="display: inline-block; padding-left: 40px; vertical-align: middle;">-->
+    <!--                                <div style="color: #455a64; font-size: 24px; padding-bottom: 5px">{{ roles.length }}</div>-->
+    <!--                                <div style="color: #99abb4;">角色</div>-->
+    <!--                            </div>-->
+    <!--                        </el-card>-->
+    <!--                    </el-col>-->
+    <!--                    <el-col :span="6">-->
+    <!--                        <el-card style="padding: 10px">-->
+    <!--                            <div style="display: inline-block; padding-right: 20px; vertical-align: middle;">-->
+    <!--                                <img src="../../file/home/home-03.png" style="width: 60px">-->
+    <!--                            </div>-->
+    <!--                            <div style="display: inline-block; padding-left: 40px; vertical-align: middle;">-->
+    <!--                                <div style="color: #455a64; font-size: 24px; padding-bottom: 5px">{{ permissions.length }}</div>-->
+    <!--                                <div style="color: #99abb4;">权限</div>-->
+    <!--                            </div>-->
+    <!--                        </el-card>-->
+    <!--                    </el-col>-->
+    <!--                    <el-col :span="6">-->
+    <!--                        <el-card style="padding: 10px">-->
+    <!--                            <div style="display: inline-block; padding-right: 20px; vertical-align: middle;">-->
+    <!--                                <img src="../../file/home/home-04.png" style="width: 60px">-->
+    <!--                            </div>-->
+    <!--                            <div style="display: inline-block; padding-left: 40px; vertical-align: middle;">-->
+    <!--                                <div style="color: #455a64; font-size: 24px; padding-bottom: 5px">{{ notices.length }}</div>-->
+    <!--                                <div style="color: #99abb4;">公告</div>-->
+    <!--                            </div>-->
+    <!--                        </el-card>-->
+    <!--                    </el-col>-->
+    <!--                </el-row>-->
+
+    <el-row :gutter="10">
+        <el-col :span="12">
+            <el-card>
+                <div slot="header" class="clearfix">
+                    <h3>系统公告</h3>
+                </div>
+                <el-collapse accordion v-model="active">
+                    <el-collapse-item :name="index" v-for="(item ,index) in notices">
+                        <template slot="title">
+                            <b>{{ item.title }}</b>
+                            <span style="margin-left: 50px; color: #888">{{ item.time }}</span>
+                        </template>
+                        <div style="padding: 0 20px">{{ item.content }}</div>
+                    </el-collapse-item>
+                </el-collapse>
+            </el-card>
+        </el-col>
+
+
+        <el-col :span="12">
+            <el-card>
+                <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                <div id="main" style="width: 100%;height:400px; margin: 0 auto"></div>
+            </el-card>
+        </el-col>
+
+    </el-row>
+
+    <el-row style="padding: 5px 0">
+        <el-col :span="24">
+            <el-card>
+                <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                <div id="polyline" style="width: 100%;height:400px; margin: 0 auto"></div>
+            </el-card>
+        </el-col>
+    </el-row>
+
+    <el-row style="padding: 5px 0">
+        <el-col :span="24">
+            <el-card>
+                <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                <div id="bar" style="width: 100%;height:400px; margin: 0 auto"></div>
+            </el-card>
+        </el-col>
+    </el-row>
+
+
+</div>
+
+<script src="../../js/echarts.min.js"></script>
+<script src="../../js/china.js"></script>
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/vue.min.js"></script>
+<script src="../../js/element.js"></script>
+
+
+<script>
+    const pieOption = {
+        title: {text: '用户地区比例统计'},
+        tooltip: {trigger: 'item'},
+        legend: {top: '0', left: 'right'},
+        series: [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                data: []
+            }
+        ]
+    };
+
+    const lineOption = {
+        title: {text: '折线图堆叠'},
+        tooltip: {trigger: 'axis'},
+        legend: {data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']},
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        },
+        yAxis: {type: 'value'},
+        series: [
+            {
+                name: '邮件营销',
+                type: 'line',
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: '联盟广告',
+                type: 'line',
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: '视频广告',
+                type: 'line',
+                data: [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name: '直接访问',
+                type: 'line',
+                data: [320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name: '搜索引擎',
+                type: 'line',
+                data: [820, 932, 901, 934, 1290, 1330, 1320]
+            }
+        ]
+    };
+
+    const barOption = {
+        title: {text: '柱状图'},
+        tooltip: {trigger: 'axis'},
+        legend: {data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']},
+        xAxis: {
+            type: 'category',
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        },
+        yAxis: {type: 'value'},
+        series: [
+            {
+                name: '邮件营销',
+                type: 'bar',
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: '联盟广告',
+                type: 'bar',
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: '视频广告',
+                type: 'bar',
+                data: [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name: '直接访问',
+                type: 'bar',
+                data: [320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name: '搜索引擎',
+                type: 'bar',
+                data: [820, 932, 901, 934, 1290, 1330, 1320]
+            }
+        ]
+    };
+
+    new Vue({
+        el: "#wrapper",
+        data: {
+            active: 0,
+            users: [],
+            roles: [],
+            permissions: [],
+            notices: [],
+            user: {},
+            tableData: [],
+            pageNum: 1,
+            pageSize: 10,
+            total: 0,
+            dialogFormVisible: false,
+            entity: {},
+            isCollapse: false
+        },
+        mounted() {
+            this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {};
+            this.load();
+        },
+        methods: {
+            load() {
+                $.get("/api/notice/").then((res) => {
+                    this.notices = res.data;
+                })
+
+                // 基于准备好的dom，初始化echarts实例
+                let myChart = echarts.init(document.getElementById('main'));
+                $.ajax({
+                    url: "/api/user",
+                    success(res) {
+                        let address = Array.from(new Set(res.data.map(v => v.address)))
+                        address.forEach(item => {
+                            let count = res.data.filter(v => v.address === item).length
+                            pieOption.series[0].data.push({name: item, value: count})
+                        })
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(pieOption);
+                    }
+                })
+
+
+
+                // 基于准备好的dom，初始化echarts实例
+                let lineChart = echarts.init(document.getElementById('polyline'));
+                // 使用刚指定的配置项和数据显示图表。
+                lineChart.setOption(lineOption);
+
+                // 基于准备好的dom，初始化echarts实例
+                let barChart = echarts.init(document.getElementById('bar'));
+                // 使用刚指定的配置项和数据显示图表。
+                barChart.setOption(barOption);
+
+            },
+            handleCollapse() {
+                this.isCollapse = !this.isCollapse;
+            },
+            logout() {
+                $.get("/api/user/logout");
+                sessionStorage.removeItem("user");
+                location.href = "/page/end/login.html";
+            }
+        }
+    })
+</script>
+</body>
+</html>

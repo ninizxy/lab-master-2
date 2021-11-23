@@ -1,0 +1,32 @@
+{
+  "groups": [
+    {
+      "name": "email",
+      "type": "com.example.common.EmailConfig",
+      "sourceType": "com.example.common.EmailConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "email.host",
+      "type": "java.lang.String",
+      "sourceType": "com.example.common.EmailConfig"
+    },
+    {
+      "name": "email.password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.common.EmailConfig"
+    },
+    {
+      "name": "email.sender-name",
+      "type": "java.lang.String",
+      "sourceType": "com.example.common.EmailConfig"
+    },
+    {
+      "name": "email.username",
+      "type": "java.lang.String",
+      "sourceType": "com.example.common.EmailConfig"
+    }
+  ],
+  "hints": []
+}

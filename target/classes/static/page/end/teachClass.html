@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>教学班级管理</title>
+    <link rel="stylesheet" href="../../css/element.css">
+    <link rel="stylesheet" href="../../css/base.css">
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <div style="padding-bottom: 10px">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item @click.native="parent.changeIndex('index')">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>教学班级管理</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+
+    <div style="height: 1px; margin: 10px 0; background-color: white"></div>
+
+<!--    班级卡片-->
+    <el-row :gutter="20"  class="el-row" type="flex" >
+        <el-col :span="8" v-for = "(item,index) in tableData" :key="item.id" class="el-col" >
+            <el-card class="el-card"  :key="index"  onclick="">
+                <div slot="header" class="clearfix">
+                    <span>已创建的班级</span>
+                    <el-button-group >
+                        <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="修改班级信息"
+                                placement="top"
+                        >
+                            <el-button type="info" plain icon="el-icon-edit"  size='small' @click="edit(item)"></el-button>
+                        </el-tooltip>
+                        <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="查看班级学生名单"
+                                placement="top"
+                        >
+                            <el-button type="info" plain icon="el-icon-more"  size='small'  @click="show(item.classId)"></el-button>
+                        </el-tooltip>
+                        <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="删除班级"
+                                placement="top"
+                        >
+                            <el-popconfirm
+                                    @onConfirm="del(item.id)"
+                                    title="确定删除？"
+                            >
+                                <el-button size='small' plain type="info" icon="el-icon-delete"  slot="reference" ></el-button>
+
+                            </el-popconfirm>
+                        </el-tooltip>
+                    </el-button-group>
+                </div>
+                <div >
+                    <div class="text item">
+                        <div class="item_tag" >
+                            <span >班级编号：</span>
+                        </div>
+                        <div class="item_desr">
+                            <span > {{item.classId}}</span>
+                        </div>
+                    </div>
+                    <div class="text item">
+                        <div class="item_tag">
+                            <span>授课教师：</span>
+                        </div>
+                        <div class="item_desr">
+                            {{item.teacherId}}
+                        </div>
+                    </div>
+                    <div class="text item">
+                        <div class="item_tag">
+                            <span>作业批改：</span>
+                        </div>
+                        <div class="item_desr">
+                            {{item.assistantId}}
+                        </div>
+                    </div>
+                </div>
+            </el-card>
+        </el-col>
+        <el-col :span="8">
+            <el-card class="box-card" style="min-height: 200px;" align="middle" onclick="">
+                <div class="el-card__body mid">
+                    <el-button  icon="el-icon-circle-plus" circle @click="add" type="info" plain></el-button>
+                    <el-button style="margin-left: 0;color: #505458" type="text">新建班级</el-button>
+                </div>
+            </el-card>
+        </el-col>
+    </el-row>
+
+
+    <!--    填写班级信息的弹窗-->
+    <el-dialog title="教学班级信息" :visible.sync="dialogFormVisible" width="40%"
+               :close-on-click-modal="false">
+        <el-form :model="entity">
+            <el-form-item label="班号" label-width="120px">
+                <el-input v-model="entity.classId" autocomplete="off" style="width: 80%"></el-input>
+            </el-form-item>
+            <el-form-item label="授课教师" label-width="120px">
+                <el-select v-model="entity.teacherId" value-key="id" clearable  placeholder="请选择教师" style="width: 80%">
+                    <el-option
+                            v-for="item in teacherData"
+                            :key="item.id"
+                            :label="item.nickName"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="班级助教" label-width="120px">
+                <el-select v-model="entity.assistantId" value-key="id"  placeholder="请选择助教" style="width: 80%">
+                    <el-option
+                            v-for="item in assistantData"
+                            :key="item.id"
+                            :label="item.nickName"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="save">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <!--    查看班级名单的弹窗-->
+    <el-dialog title="班级学生名单" :visible.sync="classStudentVisible" width="80%"
+               :close-on-click-modal="false">
+        <el-table :data="studentData" border stripe style="width: 100%">
+            <el-table-column prop="studentId" label="学生学号"> </el-table-column>
+            <el-table-column prop="studentName" label="学生姓名"></el-table-column>
+        </el-table>
+        <el-button size='small' @click="exp()" type="primary"  style="margin: 10px 0 ">导出班级名单</el-button>
+    </el-dialog>
+</div>
+
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/vue.min.js"></script>
+<script src="../../js/element.js"></script>
+<script src="../../js/tinymce/tinymce.min.js"></script>
+
+
+<script>
+
+    let urlBase = "/api/teachclass/";
+    new Vue({
+        el: "#wrapper",
+        data: {
+            options: [],
+            fileList: [],
+            user: {},
+            tableData: [],//存放所有班级
+            teacherData:[],//存放教师
+            assistantData:[],//存放助教
+            studentData:[],//存放学生
+            classId:'',//当前班级
+            pageNum: 1,
+            pageSize: 10,
+            total: 0,
+            dialogFormVisible: false,//修改班级信息的弹窗
+            classStudentVisible:false,//查看班级名单的弹窗
+            entity: {},
+            isCollapse: false,
+            search: '',
+        },
+        created() {
+            this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {};
+            this.loadTable();
+        },
+        methods: {
+            fileSuccessUpload(res) {
+                this.entity.file = "http://localhost:9999/files/" + res.data;
+                this.entity.img = "http://localhost:9999/files/" + res.data;
+                console.log(res)
+            },
+            successUpload(value) {
+                $.get("/api/teachclass/upload/" + value.data).then(res => {
+                    if (res.code === '0') {
+                        this.$message({
+                            message: "导入成功",
+                            type: "success"
+                        });
+                        this.loadTable()
+                    }
+                })
+            },
+            changeState(obj, state) {  // 审核
+                this.entity = JSON.parse(JSON.stringify(obj));
+                this.entity.state = state;
+                this.save();
+            },
+            handleCollapse() {
+                this.isCollapse = !this.isCollapse;
+            },
+            logout() {
+                $.get("/api/user/logout");
+                sessionStorage.removeItem("user");
+                location.href = "/page/end/login.html";
+            },
+            loadTable() {
+                $.get(urlBase + "/page?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize + "&name=" + this.search).then(res => {
+                    this.tableData = res.data.records;
+                    this.total = res.data.total;
+                })
+                $.get("/api/user/teacher/1").then(res => {
+                    this.teacherData = res.data;
+                })
+
+                $.get("/api/user/teacher/3").then(res => {
+                    this.assistantData = res.data;
+                })
+
+                // $.get("/api/").then(res => {
+                // this.options = res.data;
+                // })
+            },
+
+            //查看班级学生
+            show(classId){
+                $.get("/api/studentlist/classlist/"+classId).then(res => {
+                    this.studentData = res.data;
+                    console.log(res.data);
+                })
+                this.classStudentVisible=true;
+                this.classId=classId;
+            },
+            // excel 导出学生名单
+            exp() {
+                window.open("/api/studentlist/export/"+this.classId);
+            },
+
+            handleSizeChange(pageSize) {
+                this.pageSize = pageSize;
+                this.loadTable();
+            },
+            handleCurrentChange(pageNum) {
+                this.pageNum = pageNum;
+                this.loadTable();
+            },
+            add() {
+                this.entity = {};
+                this.fileList = [];
+                this.dialogFormVisible = true;
+            },
+            save() {
+                let type = this.entity.id ? "PUT" : "POST";
+                console.log(this.entity);
+                $.ajax({
+                    url: urlBase,
+                    type: type,
+                    contentType: "application/json",
+                    data: JSON.stringify(this.entity)
+                }).then(res => {
+                    if (res.code === '0') {
+                        this.$message({
+                            message: "保存成功",
+                            type: "success"
+                        });
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: "error"
+                        })
+                    }
+                    this.loadTable();
+                    this.dialogFormVisible = false;
+                })
+            },
+            edit(obj) {
+                this.entity = JSON.parse(JSON.stringify(obj));
+                this.fileList = [];
+                this.dialogFormVisible = true;
+            },
+            del(id) {
+                $.ajax({
+                    url: urlBase + id,
+                    type: "delete"
+                }).then(res => {
+                    if (res.code === '0') {
+                        this.$message({
+                            message: "删除成功",
+                            type: "success"
+                        })
+                        this.loadTable();
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: "error"
+                        })
+                    }
+                })
+            }
+        }
+    })
+</script>
+
+<style >
+    .all{
+        margin-top: -30px;
+        word-break: break-all;
+        height: 100%;
+    }
+    .mid{
+        margin-top: 25%;
+        height: 50%;
+    }
+    .mid_item{
+        justify-content: center;
+        align-items: center;
+    }
+    .item {
+        margin-bottom: 10px;
+    }
+    .item_tag{
+        float:left;
+        text-align:left;
+    }
+    .item_desr{
+        margin-left: 40%;
+        min-height: 30px;
+        text-align:left;
+    }
+    .text {
+        width: 100%;
+        font-size: 12px;
+        font-family: "Microsoft YaHei";
+        color: #909399;
+    }
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+    .clearfix:after {
+        clear: both
+    }
+
+    .el-card {
+        min-width: 100%;
+        height: 100%;
+        margin-right: 20px;
+        transition: all .5s;
+    }
+    .el-card:hover{
+        margin-top: -5px;
+    }
+    .el-row {
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap
+    }
+    .el-col {
+        border-radius: 4px;
+        align-items: stretch;
+        margin-bottom: 40px;
+    }
+</style>
+</body>
+</html>
