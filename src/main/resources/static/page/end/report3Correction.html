@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>作业批改二</title>
+    <link rel="stylesheet" href="../../css/element.css">
+    <link rel="stylesheet" href="../../css/base.css">
+
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <!--    -->
+    <div style="padding-bottom: 10px">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item @click.native="parent.changeIndex('index')">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>作业批改三</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+
+    <div style="height: 1px; margin: 10px 0; background-color: white"></div>
+
+    <div style="margin: 10px 0">
+
+        <el-input v-model="search" style="width: 20%; margin-bottom: 10px" suffix-icon="el-icon-search" placeholder="请输入学生ID按回车搜索"
+                  @keyup.enter.native="loadTable"></el-input>
+        </el-upload>
+
+        <el-form :model="listModel" ref="listModel">
+            <el-table :data="listModel.sku_list" border stripe>
+                <el-table-column prop="id" label="实验报告ID" width="100px"></el-table-column>
+                <el-table-column label="选用标准" prop="thestandard"  width="200" align="center"></el-table-column>
+                <el-table-column label="功能点" prop="funcpoint"  width="200" align="center"></el-table-column>
+                <el-table-column label="其他参数" prop="otherparam"  width="200" align="center"></el-table-column>
+                <el-table-column label="结论" prop="theconclusion"  width="200" align="center"></el-table-column>
+                <el-table-column label="得分" align="center">
+                    <template slot-scope="scope">
+                        <el-form-item :prop="'sku_list.' + scope.$index + '.'+'the_score'" :rules="skuRule.the_score">
+                            <el-input
+                                    style="margin-top:15px"
+                                    placeholder="请输入"
+                                    v-model="scope.row.the_score"
+                                    @change="setScore(scope.row)"
+                                    clearable></el-input>
+                        </el-form-item>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="120">
+                    <template slot-scope="scope">
+                        <el-button type="primary" @click="save(scope.row)" >提 交</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-form>
+        <!-- 分页 -->
+        <div style="background-color: white">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageNum"
+                    :page-sizes="[5, 10, 20, 40]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+            </el-pagination>
+        </div>
+
+    </div>
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/element.js"></script>
+    <script src="../../js/tinymce/tinymce.min.js"></script>
+
+
+    <script>
+
+        let urlBase = "/api/report3Correction/";
+        new Vue({
+            el: "#wrapper",
+            data: {
+                user: {},
+                pageNum: 1,
+                pageSize: 10,
+                total: 0,
+                entity: {},
+                seeEntity:{},
+                isCollapse: false,
+                search:'',
+                options: [],
+                dialogFormVisible:false,
+                listModel: {
+                    sku_list:[]
+                },
+                skuRule: {
+                    num: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
+                    remark: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
+                }
+            },
+            created() {
+                this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {};
+                this.loadTable();
+            },
+            methods: {
+                handleCollapse() {
+                    this.isCollapse = !this.isCollapse;
+                },
+                logout() {
+                    $.get("/api/user/logout");
+                    sessionStorage.removeItem("user");
+                    location.href = "/page/end/login.html";
+                },
+                loadTable() {
+                    $.get(urlBase + "/page?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize + "&id=" + this.search).then(res => {
+                        this.listModel.sku_list = res.data.records;
+                        this.total = res.data.total;
+                        console.log(res)
+                    })
+                },
+                exp() {
+                    window.open(urlBase + "/export");
+                },
+                handleSizeChange(pageSize) {
+                    this.pageSize = pageSize;
+                    this.loadTable();
+                },
+                handleCurrentChange(pageNum) {
+                    this.pageNum = pageNum;
+                    this.loadTable();
+                },
+                setScore(sid){
+                },
+                searchReport(sid){
+                    console.log("searchreport test")
+                    dialogFormVisible:true,
+                        $.get(urlBase + "/" + this.entity.id).then(res => {
+                            if (res.data == null)
+                            {
+                                console.log(res);
+                            }
+                            else
+                            {
+                                console.log(res);
+                                this.seeEntity=res.data;
+                            }
+                        })
+                },
+                save(sid) {
+                    sid.corrected=1;
+                    $.ajax({
+                        url: urlBase,
+                        type: 'PUT',
+                        contentType: "application/json",
+                        data: JSON.stringify(sid)
+                    }).then(res => {
+                        if (res.code === '0') {
+                            this.$message({
+                                message: "保存成功",
+                                type: "success"
+                            });
+                            this.loadTable();
+                        } else {
+                            this.$message({
+                                message: res.msg,
+                                type: "error"
+                            })
+                        }
+                    })
+                },
+            },
+        })
+    </script>
+</div>
+</body>
+</html>>

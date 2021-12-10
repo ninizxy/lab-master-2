@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>作业批改一</title>
+    <link rel="stylesheet" href="../../css/element.css">
+    <link rel="stylesheet" href="../../css/base.css">
+
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <!--    -->
+    <div style="padding-bottom: 10px">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item @click.native="parent.changeIndex('index')">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>作业批改一</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+
+    <div style="height: 1px; margin: 10px 0; background-color: white"></div>
+
+    <div style="margin: 10px 0">
+
+        <el-input v-model="search" style="width: 20%; margin-bottom: 10px" suffix-icon="el-icon-search" placeholder="请输入学生ID按回车搜索"
+                  @keyup.enter.native="loadTable"></el-input>
+        </el-upload>
+
+        <el-form :model="listModel" ref="listModel">
+            <el-table :data="listModel.sku_list" border stripe>
+                <el-table-column prop="id" label="实验报告ID" width="100px"></el-table-column>
+<!--                <el-table-column label="实验报告" width="50">-->
+<!--                    <el-button type="text" @click="searchReport()" >查看上次提交/暂存内容</el-button>-->
+<!--                </el-table-column>-->
+<!--                <el-table-column prop="id" label="学生ID" width="50"></el-table-column>-->
+                <el-table-column label="ILF功能点个数" align="center">
+                    <el-table-column prop="num1" label="低" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num2" label="中" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num3" label="高" width="40px" align="center"></el-table-column>
+                </el-table-column>
+                <el-table-column label="ELF功能点个数" align="center">
+                    <el-table-column prop="num4" label="低" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num5" label="中" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num6" label="高" width="40px" align="center"></el-table-column>
+                </el-table-column>
+                <el-table-column label="EI功能点个数" align="center">
+                    <el-table-column prop="num7" label="低" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num8" label="中" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num9" label="高" width="40px" align="center"></el-table-column>
+                </el-table-column>
+                <el-table-column label="EO功能点个数" align="center">
+                    <el-table-column prop="num10" label="低" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num11" label="中" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num12" label="高" width="40px" align="center"></el-table-column>
+                </el-table-column>
+                <el-table-column label="EQ功能点个数" align="center">
+                    <el-table-column prop="num13" label="低" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num14" label="中" width="40px" align="center"></el-table-column>
+                    <el-table-column prop="num15" label="高" width="40px" align="center"></el-table-column>
+                </el-table-column>
+                <el-table-column label="UFP" prop="ufp" width="60px" align="center"></el-table-column>
+                <el-table-column label="TDI" prop="tdi" width="60px" align="center"></el-table-column>
+<!--                <el-table-column label="通用系统特征调整参数">-->
+<!--                    <el-table-column prop="score1" label="DC"></el-table-column>-->
+<!--                    <el-table-column prop="score2" label="DDP"></el-table-column>-->
+<!--                    <el-table-column prop="score3" label="P"></el-table-column>-->
+<!--                    <el-table-column prop="score4" label="HC"></el-table-column>-->
+<!--                    <el-table-column prop="score5" label="TR"></el-table-column>-->
+<!--                    <el-table-column prop="score6" label="ODE"></el-table-column>-->
+<!--                    <el-table-column prop="score7" label="EUE"></el-table-column>-->
+<!--                    <el-table-column prop="score8" label="OU"></el-table-column>-->
+<!--                    <el-table-column prop="score9" label="CP"></el-table-column>-->
+<!--                    <el-table-column prop="score10" label="R"></el-table-column>-->
+<!--                    <el-table-column prop="score11" label="IE"></el-table-column>-->
+<!--                    <el-table-column prop="score12" label="OE"></el-table-column>-->
+<!--                    <el-table-column prop="score13" label="MS"></el-table-column>-->
+<!--                    <el-table-column prop="score14" label="FC"></el-table-column>-->
+<!--                </el-table-column>-->
+                <el-table-column label="得分" align="center">
+                    <template slot-scope="scope">
+                        <el-form-item :prop="'sku_list.' + scope.$index + '.'+'the_score'" :rules="skuRule.the_score">
+                            <el-input
+                                    style="margin-top:15px"
+                                    placeholder="请输入"
+                                    v-model="scope.row.the_score"
+                                    @change="setScore(scope.row)"
+                                    clearable></el-input>
+                        </el-form-item>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="150">
+                    <template slot-scope="scope">
+                        <el-button type="primary" @click="save(scope.row)" >提 交</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-form>
+        <!-- 分页 -->
+        <div style="background-color: white">
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageNum"
+                    :page-sizes="[5, 10, 20, 40]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+            </el-pagination>
+        </div>
+
+<!--        <el-dialog title="历史提交/暂存内容" :visible.sync="dialogFormVisible" width="40%" :close-on-click-modal="false">-->
+<!--            <h4>步骤一</h4>-->
+<!--            <span>内部逻辑文件(ILF)低权重功能点个数：{{this.seeEntity.num1}}</span></br>-->
+<!--            <span>内部逻辑文件(ILF)中权重功能点个数：{{this.seeEntity.num2}}</span></br>-->
+<!--            <span>内部逻辑文件(ILF)高权重功能点个数：{{this.seeEntity.num3}}</span></br>-->
+<!--            <span>外部接口文件(ELF)低权重功能点个数：{{this.seeEntity.num4}}</span></br>-->
+<!--            <span>外部接口文件(ELF)中权重功能点个数：{{this.seeEntity.num5}}</span></br>-->
+<!--            <span>外部接口文件(ELF)高权重功能点个数：{{this.seeEntity.num6}}</span></br>-->
+<!--            <span>外部输入(EI)低权重功能点个数：{{this.seeEntity.num7}}</span></br>-->
+<!--            <span>外部输入(EI)中权重功能点个数：{{this.seeEntity.num8}}</span></br>-->
+<!--            <span>外部输入(EI)高权重功能点个数：{{this.seeEntity.num9}}</span></br>-->
+<!--            <span>外部输出(EO)低权重功能点个数：{{this.seeEntity.num10}}</span></br>-->
+<!--            <span>外部输出(EO)中权重功能点个数：{{this.seeEntity.num11}}</span></br>-->
+<!--            <span>外部输出(EO)高权重功能点个数：{{this.seeEntity.num12}}</span></br>-->
+<!--            <span>外部查询(EQ)低权重功能点个数：{{this.seeEntity.num13}}</span></br>-->
+<!--            <span>外部查询(EQ)中权重功能点个数：{{this.seeEntity.num14}}</span></br>-->
+<!--            <span>外部查询(EQ)高权重功能点个数：{{this.seeEntity.num15}}</span></br>-->
+<!--            <h4>步骤二</h4>-->
+<!--            <span>数据通信(Data Communication)的影响程度：{{this.seeEntity.score1}}</span></br>-->
+<!--            <span>分布数据处理(Distributed Data Processing)的影响程度：{{this.seeEntity.score2}}</span></br>-->
+<!--            <span>性能(Performance)的影响程度：{{this.seeEntity.score3}}</span></br>-->
+<!--            <span>重度使用配置(Heavily used Configuration)的影响程度：{{this.seeEntity.score4}}</span></br>-->
+<!--            <span>事务率(Transaction Rate)的影响程度：{{this.seeEntity.score5}}</span></br>-->
+<!--            <span>在线数据输入(Oneline Data Entry)的影响程度：{{this.seeEntity.score6}}</span></br>-->
+<!--            <span>终端数据输入(End-User Efficiency)的影响程度：{{this.seeEntity.score7}}</span></br>-->
+<!--            <span>在线更新(Online Update)的影响程度：{{this.seeEntity.score8}}</span></br>-->
+<!--            <span>复杂处理(Data Communication)的影响程度：{{this.seeEntity.score9}}</span></br>-->
+<!--            <span>可重用性(Reusability)的影响程度：{{this.seeEntity.score10}}</span></br>-->
+<!--            <span>安装简易性(Installation Ease)的影响程度：{{this.seeEntity.score11}}</span></br>-->
+<!--            <span>易操作性(Operational Ease)的影响程度：{{this.seeEntity.score12}}</span></br>-->
+<!--            <span>多站点(Multiple Sites)的影响程度：{{this.seeEntity.score13}}</span></br>-->
+<!--            <span>便于更改(Facilitate Change)的影响程度：{{this.seeEntity.score14}}</span>-->
+<!--        </el-dialog>-->
+
+    </div>
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/element.js"></script>
+    <script src="../../js/tinymce/tinymce.min.js"></script>
+
+
+    <script>
+
+        let urlBase = "/api/report1Correction/";
+        new Vue({
+            el: "#wrapper",
+            data: {
+                user: {},
+                pageNum: 1,
+                pageSize: 10,
+                total: 0,
+                entity: {},
+                seeEntity:{},
+                isCollapse: false,
+                search:'',
+                options: [],
+                dialogFormVisible:false,
+                listModel: {
+                    sku_list:[]
+                },
+                skuRule: {
+                    num: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
+                    remark: [{ required: true, message: '该项不能为空', trigger: 'blur' }],
+                }
+            },
+            created() {
+                this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {};
+                this.loadTable();
+            },
+            methods: {
+                handleCollapse() {
+                    this.isCollapse = !this.isCollapse;
+                },
+                logout() {
+                    $.get("/api/user/logout");
+                    sessionStorage.removeItem("user");
+                    location.href = "/page/end/login.html";
+                },
+                loadTable() {
+                    $.get(urlBase + "/page?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize + "&id=" + this.search).then(res => {
+                        this.listModel.sku_list = res.data.records;
+                        this.total = res.data.total;
+                        console.log(res)
+                    })
+                },
+                exp() {
+                    window.open(urlBase + "/export");
+                },
+                handleSizeChange(pageSize) {
+                    this.pageSize = pageSize;
+                    this.loadTable();
+                },
+                handleCurrentChange(pageNum) {
+                    this.pageNum = pageNum;
+                    this.loadTable();
+                },
+                setScore(sid){
+                },
+                searchReport(sid){
+                    console.log("searchreport test")
+                    dialogFormVisible:true,
+                    $.get(urlBase + "/" + this.entity.id).then(res => {
+                            if (res.data == null)
+                            {
+                                console.log(res);
+                            }
+                            else
+                            {
+                                console.log(res);
+                                this.seeEntity=res.data;
+                            }
+                        })
+                },
+                save(sid) {
+                    sid.corrected=1;
+                    $.ajax({
+                        url: urlBase,
+                        type: 'PUT',
+                        contentType: "application/json",
+                        data: JSON.stringify(sid)
+                    }).then(res => {
+                        if (res.code === '0') {
+                            this.$message({
+                                message: "保存成功",
+                                type: "success"
+                            });
+                            this.loadTable();
+                        } else {
+                            this.$message({
+                                message: res.msg,
+                                type: "error"
+                            })
+                        }
+                    })
+                    },
+                },
+            })
+    </script>
+</div>
+</body>
+</html>

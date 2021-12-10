@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>实验二</title>
+    <link rel="stylesheet" href="../../css/element.css">
+    <link rel="stylesheet" href="../../css/base.css">
+</head>
+<body>
+<div id="wrapper" v-cloak>
+    <div style="padding-bottom: 10px">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item @click.native="parent.changeIndex('index')">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>实验二  NESMA法</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+
+    <div style="height: 1px; margin: 10px 0; background-color: white"></div>
+    <template>
+        <el-steps :active="active" finish-status="success" align-center>
+            <el-step title="Step 1" description="Indicative方法， 预估功能点"></el-step>
+            <el-step title="Step 2" description="Estimated方法， 估算功能点"></el-step>
+            <el-step title="Step 3" description="详细功能点（类似ifpug）"></el-step>
+        </el-steps>
+
+        <el-row v-show="active === 0"  style="margin-top: 20px">
+            <el-space wrap>
+                <el-form :model="listModel" ref="listModel">
+                    <el-table style="width: 100%" align="center" :data="listModel.stepOneData" border stripe>
+                        <el-table-column prop="theType" label="功能点类型" align="center"></el-table-column>
+                            <el-table-column prop="theNumber" label="功能点个数" align="center">
+                                <template slot-scope="scope">
+                                    <el-form-item :prop="'stepOneData.' + scope.$index + '.'+'theNumber'" :rules="skuRule.theNumber">
+                                        <el-input
+                                                style="margin-top:15px"
+                                                placeholder="请输入"
+                                                v-model="scope.row.theNumber"
+                                                @change="settheNumber(scope.row)"
+                                                clearable></el-input>
+                                    </el-form-item>
+                                </template>
+                            </el-table-column>
+                    </el-table>
+                </el-form>
+                <el-card style="margin-top:20px">
+                    <h3>计算结果：</h3>
+                    <span>预估功能点数 ≈ 35 × ILF + 15 × EIF ={{this.result1}}</span></br>
+                </el-card>
+
+                <el-row style="margin-top: 20px ;margin-right: 20px">
+                    <el-button @click="next">下一步</el-button>
+                    <el-button  :disabled='isEdit_1' @click="submit()">提交</el-button>
+                    <el-button  :disabled='isEdit_1' @click="save()">暂存</el-button>
+                    <el-button  :disabled='isEdit_2' @click="submitAgain()">再次提交</el-button>
+                    <el-button type="text" @click="dialogFormVisible = true" >查看上次提交/暂存内容</el-button>
+                </el-row>
+            </el-space>
+        </el-row>
+
+        <el-row v-show="active === 1" style="margin-top: 20px" >
+            <el-form :model="listModel" ref="listModel">
+                <el-form-item>
+                    <el-table :data="listModel.stepTwoData" style="width: 100%" border stripe>
+                        <el-table-column prop="theType" label="功能点类型" align="center"></el-table-column>
+                        <el-table-column prop="theNumber" label="功能点个数" align="center">
+                            <template slot-scope="scope">
+                                <el-form-item :prop="'stepTwoData.' + scope.$index + '.'+'theNumber'" :rules="skuRule.theNumber">
+                                    <el-input
+                                            style="margin-top:15px"
+                                            placeholder="请输入"
+                                            v-model="scope.row.theNumber"
+                                            @change="settheNumber(scope.row)"
+                                            clearable></el-input>
+                                </el-form-item>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-form-item>
+                <el-card>
+                    <el-form-item label="规模变更调整因子(CF)" :data="listModel.cf">
+                        <el-input v-model="listModel.cf" @change="settheCf()"></el-input>
+                    </el-form-item>
+                </el-card>
+            </el-form>
+            <el-card style="margin-top:20px">
+                <h3>计算结果：</h3>
+                <span>未经调整的估算功能点数 = 10 × ILF + 7 × EIF + 4 × EI + 5 × EO + 4 × EQ={{this.result2_bef}}</span></br>
+                <span>调整后的估算功能点数 = 未经调整的估算功能点数 × CF={{this.result2_aft}}</span></br>
+            </el-card>
+
+            <el-row style="margin-top: 20px ;margin-right: 20px">
+                <el-button  @click="last">上一步</el-button>
+                <el-button  @click="next">下一步</el-button>
+                <el-button  :disabled='isEdit_1' @click="submit()">提交</el-button>
+                <el-button  :disabled='isEdit_1' @click="save()">暂存</el-button>
+                <el-button  :disabled='isEdit_2' @click="submitAgain()">再次提交</el-button>
+                <el-button type="text" @click="dialogFormVisible = true" >查看上次提交/暂存内容</el-button>
+            </el-row>
+
+        </el-row>
+        <el-row v-show="active === 2" :gutter="20">
+            <el-row style="margin-top: 20px ;margin-right: 20px">
+                <el-card style="margin-bottom:20px">
+                    <h3>具体操作：</h3>
+                    <span style="margin-top: 20px" >    识别5类功能的功能个数识别各功能的功能要素，基于功能要素的数量，使用《功能元素复杂度计算表》确定各个功能的复杂程度，根据《功能点数与复杂度之间的对应关系》查出相应功能的功能点数，汇总所有的功能点数为未调整的功能点数。
+                    </span>
+                    <span>    复杂度参照表如下，因与实验一第一步基本相同此处不再重复安排此子实验。</span>
+                    <el-table style="width: 100%; margin-top: 20px " align="center" :data="tableData" border stripe>
+                        <el-table-column prop="theType" label="功能点类型" align="center"></el-table-column>
+                        <el-table-column prop="theLevel" label="评级"  align="center"></el-table-column>
+                        <el-table-column prop="theWeight" label="功能点权重" align="center"></el-table-column>
+                    </el-table>
+                </el-card>
+                <el-button  @click="last">上一步</el-button>
+                <el-button  :disabled='isEdit_1' @click="submit()">提交</el-button>
+                <el-button  :disabled='isEdit_1' @click="save()">暂存</el-button>
+                <el-button  :disabled='isEdit_2' @click="submitAgain()">再次提交</el-button>
+                <el-button type="text" @click="dialogFormVisible = true" >查看上次提交/暂存内容</el-button>
+            </el-row>
+
+        </el-row>
+
+    </template>
+    <el-dialog title="历史提交/暂存内容" :visible.sync="dialogFormVisible" width="40%" :close-on-click-modal="false">
+        <h4>步骤一</h4>
+        <span>内部逻辑文件(ILF)功能点个数：{{this.seeEntity.ilf}}</span></br>
+        <span>外部接口文件(ELF)功能点个数：{{this.seeEntity.elf}}</span></br>
+        <h4>步骤二</h4>
+        <span>外部输入(EI)功能点个数：{{this.seeEntity.ei}}</span></br>
+        <span>外部输出(EO)功能点个数：{{this.seeEntity.eo}}</span></br>
+        <span>外部查询(EQ)功能点个数：{{this.seeEntity.theeq}}</span></br>
+        <span>规模变更调整因子：{{this.seeEntity.cf}}</span></br>
+    </el-dialog>
+</div>
+
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/vue.min.js"></script>
+<script src="../../js/element.js"></script>
+<script src="../../js/tinymce/tinymce.min.js"></script>
+<style>
+    .el-table td {
+        padding: 18px 0;
+    }
+    .el-table th {
+        padding: 12px 0;
+    }
+    .el-table__body tr,
+    .el-table__body td {
+        padding: 0;
+        height: 40px;
+    }
+</style>
+
+<script>
+    let urlBase;
+    urlBase = "/api/reportTwo/";
+    new Vue({
+        el: "#wrapper",
+        data: {
+            user: {},
+            pageNum: 1,
+            pageSize: 10,
+            total: 0,
+            dialogFormVisible: false,
+
+            isCollapse: false,
+            search: '',
+            active: 0,//激活页面
+            isEdit_1:false,
+            isEdit_2:true,
+            result1:0,
+            result2_bef:0,
+            result2_aft:0,
+            tableData: [
+                {
+                    serialNumber:1,
+                    theType:"内部逻辑文件(ILF)",
+                    theLevel:"低",
+                    theWeight:"2",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:2,
+                    theType:"内部逻辑文件(ILF)",
+                    theLevel:"中",
+                    theWeight:"7",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:3,
+                    theType:"内部逻辑文件(ILF)",
+                    theLevel:"高",
+                    theWeight:"10",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:4,
+                    theType:"外部接口文件(ELF)",
+                    theLevel:"低",
+                    theWeight:"7",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:5,
+                    theType:"外部接口文件(ELF)",
+                    theLevel:"中",
+                    theWeight:"10",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:6,
+                    theType:"外部接口文件(ELF)",
+                    theLevel:"高",
+                    theWeight:"15",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:7,
+                    theType:"外部输入(EI)",
+                    theLevel:"低",
+                    theWeight:"3",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:8,
+                    theType:"外部输入(EI)",
+                    theLevel:"中",
+                    theWeight:"4",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:9,
+                    theType:"外部输入(EI)",
+                    theLevel:"高",
+                    theWeight:"6",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:10,
+                    theType:"外部输出(EO)",
+                    theLevel:"低",
+                    theWeight:"4",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:11,
+                    theType:"外部输出(EO)",
+                    theLevel:"中",
+                    theWeight:"5",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:12,
+                    theType:"外部输出(EO)",
+                    theLevel:"高",
+                    theWeight:"7",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:13,
+                    theType:"外部查询(EQ)",
+                    theLevel:"低",
+                    theWeight:"3",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:14,
+                    theType:"外部查询(EQ)",
+                    theLevel:"中",
+                    theWeight:"4",
+                    theNumber:0,
+                },
+                {
+                    serialNumber:15,
+                    theType:"外部查询(EQ)",
+                    theLevel:"高",
+                    theWeight:"6",
+                    theNumber:0,
+                },
+            ],
+            listModel: {
+                stepOneData: [
+                    {
+                        serialNumber:1,
+                        theType:"内部逻辑文件(ILF)",
+                        theNumber:0,
+                    },
+                    {
+                        serialNumber:2,
+                        theType:"外部接口文件(ELF)",
+                        theNumber:0,
+                    },
+                ],
+                stepTwoData: [
+                    {
+                        serialNumber:3,
+                        theType:"外部输入(EI)",
+                        theNumber:0,
+                    },
+                    {
+                        serialNumber:4,
+                        theType:"外部输出(EO)",
+                        theNumber:0,
+                    },
+                    {
+                        serialNumber:5,
+                        theType:"外部查询(EQ)",
+                        theNumber:0,
+                    },
+                ],
+                cf:0,
+            },
+            skuRule:[],
+            entity:{
+                id:0,
+                ilf:0,
+                elf:0,
+                ei:0,
+                eo:0,
+                theeq:0,
+                cf:0,
+                result1:0,
+                result2_bef:0,
+                result2_aft:0,
+                submited:0,
+                the_score:0,
+                corrected:0,
+            },
+            seeEntity:{
+                id:0,
+                ilf:0,
+                elf:0,
+                ei:0,
+                eo:0,
+                theeq:0,
+                cf:0,
+                result1:0,
+                result2_bef:0,
+                result2_aft:0,
+                submited:0,
+                the_score:0,
+                corrected:0,
+            },
+        },
+        created() {
+            this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {};
+            this.entity.id=this.user.id;
+            this.loadTable()
+        },
+        methods: {
+            handleCollapse() {
+                this.isCollapse = !this.isCollapse;
+            },
+            logout() {
+                $.get("/api/user/logout");
+                sessionStorage.removeItem("user");
+                location.href = "/page/end/login.html";
+            },
+            exp() {
+                window.open(urlBase + "/export");
+            },
+            next() {
+                if (this.active++ > 2) this.active = 2
+            },
+            last(){
+                if (this.active-- < 0 ) this.active = 0
+            },
+            loadTable() {
+                $.get(urlBase + "/" + this.entity.id).then(res => {
+                    if (res.data == null)
+                    {
+                        console.log(res);
+                    }
+                    else
+                    {
+                        console.log(res);
+                        this.seeEntity=res.data;
+                        this.isEdit_1=true;
+                        this.isEdit_2=false;
+                    }
+                })
+            },
+            settheNumber(id){
+                console.log("Num changed")
+                if (id.serialNumber == 1) {
+                    this.entity.ilf = id.theNumber;
+                    console.log(this.entity.ilf)
+                }
+                if (id.serialNumber == 2) {
+                    this.entity.elf = id.theNumber;
+                    console.log(this.entity.elf)
+                }
+                if (id.serialNumber == 3) {
+                    this.entity.ei = id.theNumber;
+                    console.log(this.entity.ei)
+                }
+                if (id.serialNumber == 4) {
+                    this.entity.eo = id.theNumber;
+                    console.log(this.entity.eo)
+                }
+                if (id.serialNumber == 5) {
+                    this.entity.theeq = id.theNumber;
+                    console.log(this.entity.theeq)
+                }
+                this.result1=35*this.entity.ilf+15*this.entity.elf;
+                this.result2_bef=10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq;
+                this.result2_aft=(10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq)*this.entity.cf;
+                },
+            settheCf(){
+                console.log("CF changed")
+                this.entity.cf = this.listModel.cf;
+                console.log(this.entity.cf)
+                this.result2_aft=(10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq)*this.entity.cf;
+            },
+            // objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+            //     if (columnIndex === 0) {
+            //         if (rowIndex % 3 === 0) {
+            //             return {
+            //                 rowspan: 3,
+            //                 colspan: 1,
+            //             }
+            //         } else {
+            //             return {
+            //                 rowspan: 0,
+            //                 colspan: 0,
+            //             }
+            //         }
+            //     }
+            // },
+            save() {
+                // console.log(this.entity)
+                // this.entity.report_id = 0;
+                this.entity.submited = 0;
+                this.entity.result1=this.result1;
+                this.entity.result2_bef=this.result2_bef;
+                this.entity.result2_aft=this.result2_aft;
+                $.ajax({
+                    url: urlBase,
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(this.entity)
+                }).then(res => {
+                    if (res.code === '0') {
+                        this.$message({
+                            message: "保存成功",
+                            type: "success"
+                        });
+                        this.loadTable();
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: "error"
+                        })
+                    }
+                    this.entity = {}
+                    $.get(urlBase + "/" + this.user.id).then(res => {
+                        console.log(res)
+                    })
+                    console.log("res:" + res)
+                    this.dialogFormVisible = false;
+                })
+            },
+            submit() {
+                // console.log(this.entity)
+                this.entity.submited = 1;
+                this.entity.result1=this.result1;
+                this.entity.result2_bef=this.result2_bef;
+                this.entity.result2_aft=this.result2_aft;
+                $.ajax({
+                    url: urlBase,
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(this.entity)
+                }).then(res => {
+                    if (res.code === '0') {
+                        this.$message({
+                            message: "保存成功",
+                            type: "success"
+                        });
+                        this.loadTable();
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: "error"
+                        })
+                    }
+                    this.entity = {}
+                    $.get(urlBase + "/" + this.user.id).then(res => {
+                        console.log(res)
+                    })
+                    console.log("res:" + res)
+                    this.dialogFormVisible = false;
+                })
+            },
+            submitAgain() {
+                console.log(this.entity)
+                // this.entity.report_id = 1,
+                this.entity.submited = 1;
+                this.entity.result1=this.result1;
+                this.entity.result2_bef=this.result2_bef;
+                this.entity.result2_aft=this.result2_aft;
+                $.ajax({
+                    url: urlBase,
+                    type: 'PUT',
+                    contentType: "application/json",
+                    data: JSON.stringify(this.entity)
+                }).then(res => {
+                    if (res.code === '0') {
+                        this.$message({
+                            message: "保存成功",
+                            type: "success"
+                        });
+                        this.loadTable();
+                    } else {
+                        this.$message({
+                            message: res.msg,
+                            type: "error"
+                        })
+                    }
+                    this.entity = {}
+                    $.get(urlBase + "/" + this.user.id).then(res => {
+                        console.log(res)
+                    })
+                    console.log("res:" + res)
+                    this.dialogFormVisible = false;
+                })
+            },
+        }
+    })
+</script>
+</body>
+</html>
