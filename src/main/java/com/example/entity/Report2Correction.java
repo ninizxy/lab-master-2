@@ -21,8 +21,8 @@ public class Report2Correction extends Model<Report2Correction>{
     private int theeq;
     private float cf;
     private int result1;
-    private int result2_bef;
-    private int result2_aft;
+    private int result2bef;
+    private int result2aft;
     private int submited;
     private int the_score;
     private int corrected;

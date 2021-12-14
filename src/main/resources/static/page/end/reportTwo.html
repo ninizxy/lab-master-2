@@ -87,8 +87,8 @@
             </el-form>
             <el-card style="margin-top:20px">
                 <h3>计算结果：</h3>
-                <span>未经调整的估算功能点数 = 10 × ILF + 7 × EIF + 4 × EI + 5 × EO + 4 × EQ={{this.result2_bef}}</span></br>
-                <span>调整后的估算功能点数 = 未经调整的估算功能点数 × CF={{this.result2_aft}}</span></br>
+                <span>未经调整的估算功能点数 = 10 × ILF + 7 × EIF + 4 × EI + 5 × EO + 4 × EQ={{this.result2bef}}</span></br>
+                <span>调整后的估算功能点数 = 未经调整的估算功能点数 × CF={{this.result2aft}}</span></br>
             </el-card>
 
             <el-row style="margin-top: 20px ;margin-right: 20px">
@@ -172,8 +172,8 @@
             isEdit_1:false,
             isEdit_2:true,
             result1:0,
-            result2_bef:0,
-            result2_aft:0,
+            result2bef:0,
+            result2aft:0,
             tableData: [
                 {
                     serialNumber:1,
@@ -323,8 +323,8 @@
                 theeq:0,
                 cf:0,
                 result1:0,
-                result2_bef:0,
-                result2_aft:0,
+                result2bef:0,
+                result2aft:0,
                 submited:0,
                 the_score:0,
                 corrected:0,
@@ -338,8 +338,8 @@
                 theeq:0,
                 cf:0,
                 result1:0,
-                result2_bef:0,
-                result2_aft:0,
+                result2bef:0,
+                result2aft:0,
                 submited:0,
                 the_score:0,
                 corrected:0,
@@ -406,14 +406,14 @@
                     console.log(this.entity.theeq)
                 }
                 this.result1=35*this.entity.ilf+15*this.entity.elf;
-                this.result2_bef=10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq;
-                this.result2_aft=(10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq)*this.entity.cf;
+                this.result2bef=10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq;
+                this.result2aft=(10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq)*this.entity.cf;
                 },
             settheCf(){
                 console.log("CF changed")
                 this.entity.cf = this.listModel.cf;
                 console.log(this.entity.cf)
-                this.result2_aft=(10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq)*this.entity.cf;
+                this.result2aft=(10*this.entity.ilf+7*this.entity.elf+4*this.entity.ei+5*this.entity.eo+4*this.entity.theeq)*this.entity.cf;
             },
             // objectSpanMethod({ row, column, rowIndex, columnIndex }) {
             //     if (columnIndex === 0) {
@@ -435,8 +435,8 @@
                 // this.entity.report_id = 0;
                 this.entity.submited = 0;
                 this.entity.result1=this.result1;
-                this.entity.result2_bef=this.result2_bef;
-                this.entity.result2_aft=this.result2_aft;
+                this.entity.result2bef=this.result2bef;
+                this.entity.result2aft=this.result2aft;
                 $.ajax({
                     url: urlBase,
                     type: 'POST',
@@ -467,8 +467,8 @@
                 // console.log(this.entity)
                 this.entity.submited = 1;
                 this.entity.result1=this.result1;
-                this.entity.result2_bef=this.result2_bef;
-                this.entity.result2_aft=this.result2_aft;
+                this.entity.result2bef=this.result2bef;
+                this.entity.result2aft=this.result2aft;
                 $.ajax({
                     url: urlBase,
                     type: 'POST',
@@ -500,8 +500,8 @@
                 // this.entity.report_id = 1,
                 this.entity.submited = 1;
                 this.entity.result1=this.result1;
-                this.entity.result2_bef=this.result2_bef;
-                this.entity.result2_aft=this.result2_aft;
+                this.entity.result2bef=this.result2bef;
+                this.entity.result2aft=this.result2aft;
                 $.ajax({
                     url: urlBase,
                     type: 'PUT',

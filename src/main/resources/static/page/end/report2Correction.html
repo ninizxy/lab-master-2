@@ -41,8 +41,8 @@
                 <el-table-column label="EQ" prop="theeq"  align="center"></el-table-column>
                 <el-table-column label="CF" prop="cf"  align="center"></el-table-column>
                 <el-table-column label="预估功能点" prop="result1" width="80px" align="center"></el-table-column>
-                <el-table-column label="调整前功能点" prop="result2_bef"  align="center"></el-table-column>
-                <el-table-column label="调整后功能点" prop="result2_aft"  align="center"></el-table-column>
+                <el-table-column label="调整前功能点" prop="result2bef"  align="center"></el-table-column>
+                <el-table-column label="调整后功能点" prop="result2aft"  align="center"></el-table-column>
                 <el-table-column label="得分" align="center">
                     <template slot-scope="scope">
                         <el-form-item :prop="'sku_list.' + scope.$index + '.'+'the_score'" :rules="skuRule.the_score">

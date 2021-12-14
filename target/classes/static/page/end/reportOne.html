@@ -47,11 +47,13 @@
                                 </template>
                             </el-table-column>
                         </el-table-column>
-
-
-
                     </el-table>
                 </el-form>
+
+                <el-card style="margin-top:20px">
+                    <h3>计算结果：</h3>
+                    <span>UFP = ∑∑ Ｗ × Ｘ = {{this.ufp}}</span>
+                </el-card>
 
                 <el-row style="margin-top: 20px ;margin-right: 20px">
                     <el-button @click="next">下一步</el-button>
@@ -83,6 +85,12 @@
                 </el-table-column>
             </el-table>
             </el-form>
+
+            <el-card style="margin-top:20px">
+                <h3>计算结果：</h3>
+                <span>TDI = Σ DI = {{this.tdi}}</span>
+            </el-card>
+
             <el-row style="margin-top: 20px ;margin-right: 20px">
                 <el-button  @click="last">上一步</el-button>
                 <el-button  @click="next">下一步</el-button>
@@ -97,8 +105,6 @@
             <el-row style="margin-top: 20px ;margin-right: 20px">
                 <el-card style="margin-bottom:20px">
                     <h3>计算结果：</h3>
-                    <span>TDI = Σ DI = {{this.tdi}}</span></br>
-                    <span>UFP = ∑∑ Ｗ × Ｘ = {{this.ufp}}</span></br>
                     <span>VAF = TDI × 0.01 + 0.65 = {{this.VAF}}</span></br>
                     <span>FP = ufp × VAF = {{this.FP}}</span>
                 </el-card>

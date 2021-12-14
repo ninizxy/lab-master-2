@@ -4,11 +4,55 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56bd1360-0093-4d1f-8e8d-5d3efa318a34" name="更改" comment="" />
+    <list default="true" id="56bd1360-0093-4d1f-8e8d-5d3efa318a34" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/entity/Report2Correction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/entity/Report2Correction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/entity/ReportTwo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/entity/ReportTwo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/page/end/report2Correction.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/page/end/report2Correction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/page/end/reportOne.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/page/end/reportOne.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/page/end/reportTwo.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/page/end/reportTwo.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/spring-configuration-metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/META-INF/spring-configuration-metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/common/AuthInterceptor.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/common/AuthInterceptor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/FileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/FileController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/HwCorrectionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/HwCorrectionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/LogController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/LogController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/MaterialController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/MaterialController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/MessageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/MessageController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/NoticeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/NoticeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/PermissionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/PermissionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/RoleController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/RoleController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/ScoreController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/ScoreController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/StudentListController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/StudentListController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/TeachClassController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/TeachClassController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/HwCorrection.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/HwCorrection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/Log.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/Log.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/Material.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/Material.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/Message.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/Message.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/Notice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/Notice.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/Permission.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/Permission.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/Score.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/Score.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/StudentList.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/StudentList.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/TeachClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/TeachClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/entity/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/entity/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/service/LogService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/service/LogService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/service/MaterialService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/service/MaterialService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/service/MessageService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/service/MessageService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/service/PermissionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/service/PermissionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/service/StudentListService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/service/StudentListService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/service/TeachClassService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/service/TeachClassService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/utils/generator/MybatisCodeGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/utils/generator/MybatisCodeGenerator.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -29,6 +73,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
   <component name="ProjectId" id="20f5NqB6EFY7jaKbkorT4tV65U1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -45,6 +92,10 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
@@ -52,7 +103,7 @@
       <recent name="C:\Users\17713\Desktop\lab-master\src\main\resources\static\file" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.Application">
+  <component name="RunManager" selected="Spring Boot.Application (1)">
     <configuration name="MybatisCodeGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.utils.generator.MybatisCodeGenerator" />
       <module name="lab-master" />
@@ -62,6 +113,13 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="x-admin" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.Application" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -76,7 +134,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.Application" />
-        <item itemvalue="应用程序.MybatisCodeGenerator" />
       </list>
     </recent_temporary>
   </component>
@@ -108,6 +165,12 @@
       <workItem from="1637498115106" duration="3140000" />
       <workItem from="1637550891269" duration="727000" />
       <workItem from="1637643456356" duration="4842000" />
+      <workItem from="1639136975566" duration="355000" />
+      <workItem from="1639139286665" duration="1427000" />
+      <workItem from="1639142157750" duration="5882000" />
+      <workItem from="1639206883370" duration="3162000" />
+      <workItem from="1639230985386" duration="487000" />
+      <workItem from="1639364465867" duration="3664000" />
     </task>
     <servers />
   </component>
